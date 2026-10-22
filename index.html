@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100e16">
+<title>আমাদের গল্প — Interactive Love Film</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Hind+Siliguri:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap');
+:root{--bg:#100e16;--cream:#f7eee9;--muted:#b7a7b3;--rose:#e7adbd;--gold:#e7ad91;--lav:#c9b7e8;--serif:'Playfair Display',Georgia,serif;--sans:'Hind Siliguri',sans-serif;--mono:'DM Mono',monospace}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--bg);color:var(--cream);font-family:var(--sans);overflow:hidden}button{font:inherit;cursor:pointer}
+body:before{content:"";position:fixed;inset:-30%;pointer-events:none;background:radial-gradient(ellipse at 20% 20%,#9a536b20,transparent 35%),radial-gradient(ellipse at 80% 75%,#5b5a9a20,transparent 36%);animation:breath 16s ease-in-out infinite alternate;z-index:0}
+.noise{position:fixed;inset:0;pointer-events:none;z-index:10;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E")}
+.top{position:fixed;z-index:20;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:19px clamp(18px,5vw,66px);border-bottom:1px solid #f5dce21c;background:#100e1680;backdrop-filter:blur(16px);font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.brand{display:flex;align-items:center;gap:10px}.mark{width:25px;height:25px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:14px}.topright{display:flex;align-items:center;gap:15px;color:#bba9b8}.lang{border:1px solid #a7829b55;color:var(--cream);background:#241823;padding:8px 12px;border-radius:99px;font:10px var(--mono)}
+#app{position:relative;z-index:1;width:100%;height:100%;isolation:isolate}
+.scene{position:absolute;inset:0;display:none;overflow:hidden;padding:100px clamp(22px,8vw,120px) 105px;align-items:center;justify-content:center;opacity:0;transform:translateY(16px) scale(.99);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1);background:radial-gradient(ellipse at 70% 25%,#60405220,transparent 45%)}
+.scene.active{display:flex;opacity:1;transform:none}
+.scene.leaving{opacity:0;transform:translateY(-12px) scale(1.015)}
+.inner{width:min(1120px,100%);position:relative;z-index:2}
+.kicker{font:10px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:#d4afc2;display:flex;gap:11px;align-items:center}.kicker:before{content:"";width:31px;height:1px;background:var(--gold)}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(58px,10vw,140px);line-height:.9;letter-spacing:-.075em;font-weight:600;margin:27px 0;color:#fff5f1}h1 em,h2 em{font-family:var(--serif);font-weight:500;color:transparent;background:linear-gradient(110deg,#f3c5b4,#d9a3c0 60%,#c7b8e9);-webkit-background-clip:text;background-clip:text}
+h2{font-size:clamp(42px,7.2vw,94px);line-height:.97;letter-spacing:-.065em;font-weight:500;color:#fff2ef;margin:18px 0 22px}
+.copy{max-width:570px;color:#d1c2d0;font-size:clamp(16px,1.6vw,20px);line-height:1.95}
+.eyebrow{font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.cta{border:1px solid #fff2;background:linear-gradient(115deg,#e7ad91,#d7a3bd 62%,#b9addf);color:#251720;padding:15px 21px;display:inline-flex;align-items:center;justify-content:space-between;gap:28px;min-width:190px;box-shadow:0 12px 40px #d99db51c;transition:.25s}
+.cta:hover{transform:translateY(-3px);filter:brightness(1.08)}.quiet{background:transparent;color:#eadce5;border:0;border-bottom:1px solid #e7ad9177;padding:9px 0}
+.actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:30px}
+.hero-layout{display:grid;grid-template-columns:1fr .85fr;gap:5vw;align-items:center}
+.art{height:min(62vh,600px);min-height:390px;position:relative}
+.sun{position:absolute;width:min(32vw,390px);aspect-ratio:1;border-radius:50%;right:8%;top:6%;background:radial-gradient(circle at 35% 30%,#f2c7b3,#b77e99 55%,#61547b);box-shadow:0 0 100px #d99ab51c}
+.paper{position:absolute;right:7%;top:12%;width:min(78%,360px);height:75%;padding:13px;background:linear-gradient(145deg,#f2d9cd,#d5b3c9 60%,#a9a0c9);transform:rotate(5deg);box-shadow:0 35px 85px #0008}
+.paperin{height:100%;border:1px solid #59404d88;padding:23px;display:flex;flex-direction:column;justify-content:space-between;color:#3d2938}.scribble{font:italic clamp(29px,4vw,47px)/1.05 var(--serif);transform:rotate(-4deg)}.scribble span{color:#8c4264}.polaroid{position:absolute;left:0;bottom:5%;width:42%;background:#f7eee7;padding:9px 9px 35px;transform:rotate(-9deg);box-shadow:0 20px 60px #0009}.photo{height:160px;position:relative;overflow:hidden;background:linear-gradient(145deg,#6b8790,#d8a9a2 60%,#ead6b7)}.photo:before{content:"";position:absolute;width:130px;height:130px;border-radius:50%;background:#f4d8ad;right:-10px;top:-10px}.photo:after{content:"";position:absolute;bottom:-40px;left:-10%;width:120%;height:110px;background:#394d4c;border-radius:50% 50% 0 0}.sil{position:absolute;z-index:1;bottom:12px;width:45px;height:100px;background:#293c3e;border-radius:30px 30px 5px 5px}.sil:before{content:"";position:absolute;width:34px;height:37px;top:-27px;left:6px;border-radius:50%;background:#bb8a78}.sil.a{left:23%}.sil.b{right:20%;background:#9e6470;transform:rotate(-7deg)}.polacap{font:italic 14px var(--serif);text-align:center;color:#533b4b;margin-top:10px}.seal{position:absolute;right:0;bottom:12%;width:90px;height:90px;border-radius:50%;background:linear-gradient(145deg,#e8b49b,#cda6c8 65%,#b4aedb);color:#291923;display:grid;place-items:center;text-align:center;font:10px/1.4 var(--mono);transform:rotate(9deg)}
+.bottom{position:fixed;z-index:20;bottom:0;left:0;right:0;padding:17px clamp(18px,5vw,66px) max(17px,env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(0deg,#100e16f5,#100e16c9 65%,transparent)}
+.progress-wrap{display:flex;align-items:center;gap:13px;min-width:0}.pagecount{font:10px var(--mono);letter-spacing:.13em;color:#b7a7b3;white-space:nowrap}.progress{display:flex;gap:5px}.dot{height:3px;width:clamp(9px,2.4vw,25px);background:#ffffff26;border:0;padding:0;transition:background .3s,width .3s}.dot.active{background:linear-gradient(90deg,#e7ad91,#d7a3bd);width:clamp(18px,3vw,34px)}
+.nav{display:flex;gap:9px}.nav button{border:1px solid #a7829b55;background:#211720;color:#f4e8ef;padding:12px 16px;font-size:13px;transition:.2s}.nav button:hover{border-color:#e7ad91}.nav .next{background:#f0d5d3;color:#251720;border-color:#f0d5d3;min-width:145px}.nav button:disabled{opacity:.25;cursor:default}
+/* distinct scenes */
+.s1{background:radial-gradient(ellipse at 75% 40%,#60405c45,transparent 38%),linear-gradient(120deg,#100e16,#1e1421 55%,#17182b)}
+.s2{background:radial-gradient(ellipse at 70% 25%,#c59b6b22,transparent 35%),linear-gradient(130deg,#21161d,#33202b 55%,#171522)}
+.folder{width:min(430px,85vw);height:300px;margin:28px auto 0;position:relative;perspective:900px}.folderback{position:absolute;inset:22px 0 0;background:linear-gradient(135deg,#d9b991,#aa806d);border-radius:5px;box-shadow:0 30px 70px #0007}.folderfront{position:absolute;inset:50px 0 0;background:linear-gradient(135deg,#e6cba5,#b98e79);border-radius:5px;transform-origin:bottom;transition:transform .9s cubic-bezier(.2,.7,.2,1);padding:22px;color:#3e2930}.folder.open .folderfront{transform:rotateX(68deg) translateY(-30px)}.folder-label{border:1px solid #664b4c66;padding:14px;font:10px var(--mono);letter-spacing:.15em}.foldernote{position:absolute;inset:0 20px 22px;background:#f7e9dc;color:#392838;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:25px;box-shadow:0 10px 30px #0003}.foldernote strong{font:italic 32px var(--serif);font-weight:500}.foldernote p{line-height:1.8;margin:14px 0 0}
+.s3{background:radial-gradient(ellipse at 45% 15%,#e7ad9124,transparent 40%),linear-gradient(160deg,#191827,#35253a 60%,#1a1828)}
+.quote{font:italic clamp(27px,4.4vw,52px)/1.35 var(--serif);max-width:850px;color:#f7e8e7}.quote em{color:#e7adbd}.chapter-label{display:flex;gap:14px;align-items:center;color:#b9a7b9;font:10px var(--mono);letter-spacing:.14em;margin-bottom:25px}.chapter-label:before{content:"";width:40px;height:1px;background:#e7ad91}
+.s4{background:radial-gradient(ellipse at 20% 20%,#9d6b8240,transparent 40%),linear-gradient(130deg,#2b1a28,#171b2a)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:28px}.memorycard{min-height:200px;text-align:left;padding:22px;border:1px solid #fff2;background:linear-gradient(145deg,#ffffff0e,#ffffff03);color:#f6e8ef;display:flex;flex-direction:column;justify-content:space-between;transition:.35s;position:relative;overflow:hidden}.memorycard:hover,.memorycard.open{transform:translateY(-5px);border-color:#e7ad9188;background:linear-gradient(145deg,#e7ad911c,#d5a3bd0b)}.memorycard b{font:italic 29px var(--serif);font-weight:500;color:#e7adbd}.memorycard small{font:9px var(--mono);letter-spacing:.14em;color:#bda8bc}.memorycard span{font-size:14px;line-height:1.8;color:#d7c7d4}.memorycard .reveal{display:none}.memorycard.open .reveal{display:block;animation:fadeup .5s both}.memorycard.open .teaser{display:none}
+.s5{background:radial-gradient(ellipse at 80% 40%,#506c7a2b,transparent 36%),linear-gradient(120deg,#101b25,#1d2837 55%,#191627)}
+.s6{background:radial-gradient(ellipse at 50% 40%,#a45c7c20,transparent 40%),linear-gradient(140deg,#1a1320,#321d2c 55%,#191727)}
+.timer{display:flex;gap:clamp(12px,3vw,35px);flex-wrap:wrap;margin-top:36px}.unit{min-width:65px}.num{font:clamp(42px,6vw,78px)/1 var(--serif);letter-spacing:-.06em;background:linear-gradient(120deg,#ffe0d4,#e7adbd 60%,#c9b7e8);color:transparent;-webkit-background-clip:text;background-clip:text}.unit small{display:block;margin-top:12px;font:9px var(--mono);color:#b9a7b9;letter-spacing:.14em;text-transform:uppercase}
+.s7{background:radial-gradient(ellipse at 70% 25%,#b08d9c20,transparent 38%),linear-gradient(120deg,#211922,#342330 58%,#1a1b2a)}
+.letter{max-width:760px;margin:0 auto;background:linear-gradient(145deg,#f5e8e0,#efe0e9 70%,#e5e1f0);color:#30202c;padding:clamp(24px,5vw,58px);box-shadow:12px 12px 0 #bd91a9;position:relative}.letter:before{content:"A LITTLE NOTE / ONLY FOR YOU";position:absolute;top:14px;right:17px;font:8px var(--mono);letter-spacing:.14em;color:#8c6c81}.letter h3{font:italic clamp(27px,4vw,42px) var(--serif);color:#63394f;margin:18px 0 23px}.letter p{color:#584651;font-size:clamp(15px,1.5vw,17px);line-height:2;margin-bottom:17px}.signature{font:italic 26px var(--serif);color:#a64f73;margin-top:24px}
+.s8{background:radial-gradient(ellipse at 78% 15%,#b7a0d22b,transparent 35%),linear-gradient(130deg,#171627,#28203a 60%,#17131e)}
+.constellation{position:absolute;right:5%;top:18%;width:38vw;height:50vh;opacity:.7}.constellation svg{width:100%;height:100%}.star{fill:#ffe6d4;filter:drop-shadow(0 0 6px #f7c4d5);cursor:pointer}.starline{stroke:#e7adbd;stroke-width:1;opacity:.4}
+.s9{background:radial-gradient(ellipse at 75% 20%,#c6a5a426,transparent 38%),linear-gradient(130deg,#251922,#3a2633 50%,#1b1b2a)}
+.window{width:min(360px,80vw);height:260px;border:9px solid #5c4357;box-shadow:0 0 0 1px #d7a3bd55,0 20px 80px #0007;position:relative;margin-top:25px;background:linear-gradient(160deg,#151a32,#59486d 55%,#e0a9a4);overflow:hidden}.window:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 65% 28%,#fff1cc 0 4px,transparent 5px),radial-gradient(circle at 25% 20%,#fff 0 1px,transparent 2px),radial-gradient(circle at 40% 45%,#fff 0 1px,transparent 2px),radial-gradient(circle at 85% 55%,#fff 0 1px,transparent 2px),linear-gradient(90deg,transparent 49%,#5c4357 49% 51%,transparent 51%),linear-gradient(0deg,transparent 49%,#5c4357 49% 51%,transparent 51%)}
+.s10{background:radial-gradient(ellipse at 55% 25%,#f1bd9e28,transparent 40%),linear-gradient(130deg,#20151d,#37202d 52%,#15182a)}
+.final-sun{position:absolute;width:min(52vw,620px);aspect-ratio:1;border-radius:50%;right:-5%;top:10%;background:radial-gradient(circle at 40% 35%,#f5d7b0,#d79bb2 54%,#655c88 80%,transparent 81%);filter:blur(.2px);opacity:.65;box-shadow:0 0 100px #e6a1c222}
+.big-final{font-size:clamp(55px,9vw,120px);line-height:.94;letter-spacing:-.07em;max-width:850px}
+.footer-note{font:9px var(--mono);letter-spacing:.12em;color:#aa98ad;margin-top:28px}
+@keyframes breath{from{transform:scale(1);opacity:.6}to{transform:scale(1.08);opacity:1}}@keyframes fadeup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes twinkle{0%,100%{opacity:.35}50%{opacity:1}}
+@media(max-width:760px){
+ .top{padding:14px 17px}.top .toplabel{display:none}.scene{padding:83px 22px 100px;align-items:center}.inner{max-height:100%;overflow-y:auto;scrollbar-width:none}.inner::-webkit-scrollbar{display:none}.hero-layout{grid-template-columns:1fr;gap:4px}.hero-layout .art{height:32vh;min-height:200px;max-height:280px;margin-top:8px}.hero-layout .copy{font-size:15px;line-height:1.75}.hero-layout h1{font-size:clamp(54px,14vw,82px);margin:18px 0}.sun{width:52vw;right:16%;top:0}.paper{height:95%;width:55%;right:18%;top:0;padding:7px}.paperin{padding:12px}.scribble{font-size:clamp(20px,6vw,31px)}.polaroid{width:31%;bottom:0;padding:5px 5px 20px}.photo{height:75px}.sil{height:55px;width:24px;bottom:6px}.sil:before{width:20px;height:21px;top:-15px;left:2px}.polacap{font-size:9px;margin-top:5px}.seal{width:55px;height:55px;font-size:7px;right:2%;bottom:5%}
+ h2{font-size:clamp(42px,11vw,68px)}.copy{font-size:15px;line-height:1.8}.cards{grid-template-columns:1fr;gap:8px;margin-top:18px}.memorycard{min-height:130px;padding:17px}.memorycard b{font-size:24px}.memorycard span{font-size:13px}.constellation{right:-6%;top:48%;width:60vw;height:28vh;opacity:.42}.timer{gap:14px;margin-top:26px}.unit{min-width:55px}.num{font-size:44px}.letter{padding:26px 22px}.letter:before{font-size:6px}.letter p{font-size:14px;line-height:1.85}.folder{height:230px;width:min(330px,88vw);margin-top:15px}.foldernote strong{font-size:25px}.foldernote p{font-size:13px}.folderfront{inset:40px 0 0;padding:15px}.bottom{padding:12px 14px max(12px,env(safe-area-inset-bottom));gap:8px}.progress-wrap{gap:7px}.pagecount{font-size:8px}.progress{gap:3px}.dot{width:7px}.dot.active{width:15px}.nav{gap:5px}.nav button{padding:10px 11px;font-size:12px}.nav .next{min-width:112px}.s4 .inner{padding-bottom:3px}.big-final{font-size:clamp(48px,13vw,82px)}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<header class="top">
+ <div class="brand"><span class="mark">↗</span><span>OUR STORY / VOL. 01</span></div>
+ <div class="topright"><span class="toplabel" data-bn="শুধু আমাদের দুজনের জন্য" data-en="JUST FOR THE TWO OF US">শুধু আমাদের দুজনের জন্য</span><button class="lang" id="langBtn">EN / বাংলা</button></div>
+</header>
+<main id="app">
+<section class="scene s1 active" data-scene="0">
+ <div class="inner hero-layout">
+  <div>
+   <div class="kicker" data-bn="একটা ছোট্ট ব্যক্তিগত আর্কাইভ" data-en="A SMALL PERSONAL ARCHIVE">একটা ছোট্ট ব্যক্তিগত আর্কাইভ</div>
+   <h1 data-bn="আমাদের<br><em>গল্পটা</em><br>চলছে।" data-en="Our story<br>is still <em>going.</em>">আমাদের<br><em>গল্পটা</em><br>চলছে।</h1>
+   <p class="copy" data-bn="সব সুন্দর মুহূর্তের ছবি থাকে না। কিছু থেকে যায় হঠাৎ হেসে ফেলা, রাগ করে থাকা, আর দিন শেষে আবার একে অপরের কাছে ফিরে আসার মধ্যে। এই পেজটা ওইসবের জন্য।" data-en="Not every good moment gets a photo. Some stay in an unexpected laugh, a tiny fight, and finding our way back to each other at the end of the day. This page is for those moments.">সব সুন্দর মুহূর্তের ছবি থাকে না। কিছু থেকে যায় হঠাৎ হেসে ফেলা, রাগ করে থাকা, আর দিন শেষে আবার একে অপরের কাছে ফিরে আসার মধ্যে। এই পেজটা ওইসবের জন্য।</p>
+   <div class="actions"><button class="cta" data-next><span data-bn="গল্পটা খুলে দেখি" data-en="OPEN OUR STORY">গল্পটা খুলে দেখি</span><span>↗</span></button><span class="eyebrow" data-bn="ফাইল নং ০০১ · শেষ করার কোনো তারিখ নেই" data-en="FILE NO. 001 · NO END DATE">ফাইল নং ০০১ · শেষ করার কোনো তারিখ নেই</span></div>
+  </div>
+  <div class="art"><div class="sun"></div><div class="paper"><div class="paperin"><div class="eyebrow">US, IN LITTLE THINGS · 01—∞</div><div class="scribble" data-bn="তোমার সাথে<br>সাধারণ দিনও<br><span>অন্যরকম।</span>" data-en="Even an<br>ordinary day<br>with you is <span>different.</span>">তোমার সাথে<br>সাধারণ দিনও<br><span>অন্যরকম।</span></div><div class="eyebrow">KEEP THIS CLOSE · ♥</div></div></div><div class="polaroid"><div class="photo"><i class="sil a"></i><i class="sil b"></i></div><div class="polacap" data-bn="এমন আরও অনেক দিন" data-en="More days like this">এমন আরও অনেক দিন</div></div><div class="seal" data-bn="চলতেই<br>থাকুক ↗" data-en="LET IT<br>KEEP GOING ↗">চলতেই<br>থাকুক ↗</div></div>
+ </div>
+</section>
+<section class="scene s2" data-scene="1">
+ <div class="inner">
+  <div class="kicker">01 / THE LITTLE ARCHIVE</div><h2 data-bn="একটা ফোল্ডার।<br><em>শুধু তোমাদের।</em>" data-en="One little folder.<br><em>Just yours.</em>">একটা ফোল্ডার।<br><em>শুধু তোমাদের।</em></h2>
+  <p class="copy" data-bn="সব গল্প সবাইকে দেখানোর জন্য লেখা হয় না। কিছু গল্প থাকে নিজের কাছে—একটা ছোট্ট ফোল্ডারে, যেখানে জমা থাকে হাসি, অভিমান, আর ফিরে আসার ঠিকানাগুলো।" data-en="Not every story is meant for everyone. Some belong to two people alone—a little folder for laughter, little hurts, and the familiar way back to each other.">সব গল্প সবাইকে দেখানোর জন্য লেখা হয় না। কিছু গল্প থাকে নিজের কাছে—একটা ছোট্ট ফোল্ডারে, যেখানে জমা থাকে হাসি, অভিমান, আর ফিরে আসার ঠিকানাগুলো।</p>
+  <div class="folder" id="folder"><div class="folderback"></div><div class="foldernote"><div class="eyebrow">PRIVATE ARCHIVE / 001</div><strong data-bn="তোমার সাথে<br>সাধারণ দিনও অন্যরকম।" data-en="Even ordinary days<br>feel different with you.">তোমার সাথে<br>সাধারণ দিনও অন্যরকম।</strong><p data-bn="ভালোবাসা সব সময় বড় কোনো ঘটনা নয়। কখনো কখনো, পাশে থাকা একজন মানুষই পুরো দিনের রং বদলে দেয়।" data-en="Love isn't always a grand event. Sometimes one person beside you changes the colour of an entire day.">ভালোবাসা সব সময় বড় কোনো ঘটনা নয়। কখনো কখনো, পাশে থাকা একজন মানুষই পুরো দিনের রং বদলে দেয়।</p></div><div class="folderfront"><div class="folder-label">CONFIDENTIAL · OUR LITTLE THINGS</div></div></div>
+  <div class="actions"><button class="cta" id="openFolder"><span data-bn="ফোল্ডারটা খোলো" data-en="OPEN THE FOLDER">ফোল্ডারটা খোলো</span><span>↗</span></button><span class="eyebrow" data-bn="ভেতরে কিছু আছে" data-en="THERE'S SOMETHING INSIDE">ভেতরে কিছু আছে</span></div>
+ </div>
+</section>
+<section class="scene s3" data-scene="2">
+ <div class="inner">
+  <div class="chapter-label">02 / THE ORDINARY MAGIC</div>
+  <div class="quote" data-bn="“তোমার সাথে <em>সাধারণ দিনও অন্যরকম।</em> কোনো বিশেষ পরিকল্পনা লাগে না—তুমি থাকলেই, ছোট্ট একটা মুহূর্তও মনে রাখার মতো হয়ে যায়।”" data-en="“Even an <em>ordinary day feels different with you.</em> No special plan needed. With you there, even a tiny moment becomes something worth keeping.”">“তোমার সাথে <em>সাধারণ দিনও অন্যরকম।</em> কোনো বিশেষ পরিকল্পনা লাগে না—তুমি থাকলেই, ছোট্ট একটা মুহূর্তও মনে রাখার মতো হয়ে যায়।”</div>
+  <p class="copy" style="margin-top:28px" data-bn="হয়তো এটাই কাছের মানুষ হওয়ার মানে—প্রতিটা দিন অসাধারণ হবে না, কিন্তু সাধারণ দিনগুলোও আর একেবারে সাধারণ থাকে না।" data-en="Maybe this is what being close means: not every day becomes extraordinary, but ordinary days stop feeling quite so ordinary.">হয়তো এটাই কাছের মানুষ হওয়ার মানে—প্রতিটা দিন অসাধারণ হবে না, কিন্তু সাধারণ দিনগুলোও আর একেবারে সাধারণ থাকে না।</p>
+ </div>
+</section>
+<section class="scene s4" data-scene="3">
+ <div class="inner">
+  <div class="kicker">03 / THE LITTLE THINGS</div><h2 data-bn="যে জিনিসগুলো<br><em>আমাদের মতো।</em>" data-en="Things that feel<br><em>like us.</em>">যে জিনিসগুলো<br><em>আমাদের মতো।</em></h2>
+  <p class="copy" data-bn="বড় কোনো ঘটনা না। বরং সেই ছোট ব্যাপারগুলো—যেগুলো অন্য কেউ বুঝবে না, কিন্তু আমরা বুঝি। প্রতিটায় একবার করে ট্যাপ করো।" data-en="Not the grand gestures. The tiny things nobody else would get, but we do. Tap each one.">বড় কোনো ঘটনা না। বরং সেই ছোট ব্যাপারগুলো—যেগুলো অন্য কেউ বুঝবে না, কিন্তু আমরা বুঝি। প্রতিটায় একবার করে ট্যাপ করো।</p>
+  <div class="cards">
+   <button class="memorycard"><small>MEMORY / 001</small><b>হা!</b><div class="teaser" data-bn="আমাদের ওই হাসিটা ↗" data-en="That laugh of ours ↗">আমাদের ওই হাসিটা ↗</div><span class="reveal" data-bn="যে কথাটা বললেই দুজনের হাসি পায়—কারণটা আর কাউকে বোঝানো যাবে না।" data-en="That one thing that makes us laugh every time. No one else would understand why.">যে কথাটা বললেই দুজনের হাসি পায়—কারণটা আর কাউকে বোঝানো যাবে না।</span></button>
+   <button class="memorycard"><small>MEMORY / 002</small><b>☼</b><div class="teaser" data-bn="কিছু না করেও ভালো লাগা ↗" data-en="Doing nothing, feeling good ↗">কিছু না করেও ভালো লাগা ↗</div><span class="reveal" data-bn="কোনো প্ল্যান নেই, বিশেষ কিছু নেই—তবু দিনটা ভালো, কারণ তুমি পাশে ছিলে।" data-en="No plan, nothing special—still a good day, just because you were there.">কোনো প্ল্যান নেই, বিশেষ কিছু নেই—তবু দিনটা ভালো, কারণ তুমি পাশে ছিলে।</span></button>
+   <button class="memorycard"><small>MEMORY / 003</small><b>♡</b><div class="teaser" data-bn="তোমার সেই ব্যাপারটা ↗" data-en="That thing you do ↗">তোমার সেই ব্যাপারটা ↗</div><span class="reveal" data-bn="যেটা দেখে বিরক্ত হই বলি, কিন্তু সত্যি বলতে ওটাই মিস করি।" data-en="The thing I pretend to complain about, but secretly miss.">যেটা দেখে বিরক্ত হই বলি, কিন্তু সত্যি বলতে ওটাই মিস করি।</span></button>
+  </div>
+ </div>
+</section>
+<section class="scene s5" data-scene="4">
+ <div class="inner">
+  <div class="kicker">04 / FINDING OUR WAY BACK</div><h2 data-bn="সব দিন সহজ না।<br><em>তবু আমরা আছি।</em>" data-en="Not every day is easy.<br><em>Still, we're here.</em>">সব দিন সহজ না।<br><em>তবু আমরা আছি।</em></h2>
+  <p class="copy" data-bn="কখনো রাগ হয়, কখনো কথা কাটাকাটি হয়, কখনো দুজনেই নিজের মতো চুপ করে থাকি। সম্পর্ক মানে প্রতিদিন নিখুঁত হওয়া নয়। সম্পর্ক মানে, মন খারাপের দিনেও একে অপরের দিকে ফিরে আসার ইচ্ছেটুকু বাঁচিয়ে রাখা।" data-en="Sometimes we're annoyed, sometimes we argue, sometimes we both go quiet. Love isn't about getting every day right. It's about keeping the wish to find each other again, even on the hard days.">কখনো রাগ হয়, কখনো কথা কাটাকাটি হয়, কখনো দুজনেই নিজের মতো চুপ করে থাকি। সম্পর্ক মানে প্রতিদিন নিখুঁত হওয়া নয়। সম্পর্ক মানে, মন খারাপের দিনেও একে অপরের দিকে ফিরে আসার ইচ্ছেটুকু বাঁচিয়ে রাখা।</p>
+  <div class="quote" style="margin-top:28px" data-bn="“সব সময় একমত না হলেও, <em>একে অপরের দিকেই ফিরে আসি</em>—এটাই আসল।”" data-en="“We don't always agree, but we keep <em>finding our way back</em> to each other. That matters.”">“সব সময় একমত না হলেও, <em>একে অপরের দিকেই ফিরে আসি</em>—এটাই আসল।”</div>
+ </div>
+</section>
+<section class="scene s6" data-scene="5">
+ <div class="inner">
+  <div class="kicker">05 / TIME, TOGETHER</div><h2 data-bn="সময় যাচ্ছে।<br><em>আমরা আছি।</em>" data-en="Time moves.<br><em>We're here.</em>">সময় যাচ্ছে।<br><em>আমরা আছি।</em></h2>
+  <p class="copy" data-bn="শুরুটা যেদিনই হোক, তার পর থেকে কতগুলো দিন পেরিয়েছে—এটা শুধু একটা সংখ্যা না। এর মধ্যে কত কথা, কত অপেক্ষা, কতবার ‘বাসায় পৌঁছে জানিও’ আছে।" data-en="Whenever it began, every day since has held conversations, waiting, and little 'text me when you're home' messages. It's more than a number.">শুরুটা যেদিনই হোক, তার পর থেকে কতগুলো দিন পেরিয়েছে—এটা শুধু একটা সংখ্যা না। এর মধ্যে কত কথা, কত অপেক্ষা, কতবার ‘বাসায় পৌঁছে জানিও’ আছে।</p>
+  <div class="timer"><div class="unit"><div class="num" id="days">—</div><small data-bn="দিন" data-en="Days">দিন</small></div><div class="unit"><div class="num" id="hours">—</div><small data-bn="ঘণ্টা" data-en="Hours">ঘণ্টা</small></div><div class="unit"><div class="num" id="minutes">—</div><small data-bn="মিনিট" data-en="Minutes">মিনিট</small></div><div class="unit"><div class="num" id="seconds">—</div><small data-bn="সেকেন্ড" data-en="Seconds">সেকেন্ড</small></div></div>
+  <p class="eyebrow" style="margin-top:25px" data-bn="তারিখটি তোমাদের আসল শুরুর দিনের সঙ্গে মিলিয়ে নিও" data-en="Set the date to the real day your story began">তারিখটি তোমাদের আসল শুরুর দিনের সঙ্গে মিলিয়ে নিও</p>
+ </div>
+</section>
+<section class="scene s7" data-scene="6">
+ <div class="inner">
+  <div class="eyebrow">06 / UNSENT, UNTIL NOW</div>
+  <article class="letter">
+   <div class="eyebrow" data-bn="তোমার জন্য, একদম নিজের ভাষায়" data-en="FOR YOU, IN MY OWN WORDS">তোমার জন্য, একদম নিজের ভাষায়</div>
+   <h3 data-bn="শোনো, একটা কথা বলি?" data-en="Hey, can I tell you something?">শোনো, একটা কথা বলি?</h3>
+   <p data-bn="তোমাকে নিয়ে সব সময় সুন্দর সুন্দর কথা মাথায় আসে, এমন না। কখনো রাগ হয়, কখনো কথা কাটাকাটি হয়, কখনো দুজনেই নিজের মতো চুপ করে থাকি।" data-en="I don't always have pretty thoughts or perfect words about us. Sometimes I'm annoyed, sometimes we argue, sometimes we both go quiet.">তোমাকে নিয়ে সব সময় সুন্দর সুন্দর কথা মাথায় আসে, এমন না। কখনো রাগ হয়, কখনো কথা কাটাকাটি হয়, কখনো দুজনেই নিজের মতো চুপ করে থাকি।</p>
+   <p data-bn="কিন্তু দিনের শেষে তোমাকে একটা কথা বলতে ইচ্ছা করে, কোনো কারণ ছাড়াই তোমার কথা মনে পড়ে, আর ভালো কিছু হলে প্রথমে তোমাকেই জানাতে মন চায়। আমার কাছে এই ছোট ব্যাপারগুলোই অনেক বড়।" data-en="But at the end of the day, I still want to tell you something, think of you for no particular reason, and share the good news with you first. Those little things mean a lot to me.">কিন্তু দিনের শেষে তোমাকে একটা কথা বলতে ইচ্ছা করে, কোনো কারণ ছাড়াই তোমার কথা মনে পড়ে, আর ভালো কিছু হলে প্রথমে তোমাকেই জানাতে মন চায়। আমার কাছে এই ছোট ব্যাপারগুলোই অনেক বড়।</p>
+   <p data-bn="তাই আজকে নতুন করে কিছু শুরু করার কথা না। আমরা তো শুরু করেই দিয়েছি। শুধু বলতে চাইলাম—তোমার সাথে এই গল্পটা লিখতে আমার এখনো ভালো লাগে। আর সামনে কী কী পাগলামি অপেক্ষা করছে, সেটা দেখার জন্য আমি তৈরি।" data-en="So this isn't about starting something new. We've already started. I just wanted you to know I still love writing this story with you—and I'm ready to see what kind of chaos the next chapters bring.">তাই আজকে নতুন করে কিছু শুরু করার কথা না। আমরা তো শুরু করেই দিয়েছি। শুধু বলতে চাইলাম—তোমার সাথে এই গল্পটা লিখতে আমার এখনো ভালো লাগে। আর সামনে কী কী পাগলামি অপেক্ষা করছে, সেটা দেখার জন্য আমি তৈরি।</p>
+   <div class="signature" data-bn="তোমারই মানুষটা।" data-en="Your person.">তোমারই মানুষটা।</div>
+  </article>
+ </div>
+</section>
+<section class="scene s8" data-scene="7">
+ <div class="constellation"><svg viewBox="0 0 300 330" aria-label="constellation"><path class="starline" d="M30 65 L90 25 L140 85 L220 50 L265 125 L200 180 L240 260 L150 300 L90 225 L35 170 Z M30 65 L200 180 L90 225 L140 85 L265 125 M35 170 L150 300 L240 260"/><circle class="star" cx="30" cy="65" r="4"/><circle class="star" cx="90" cy="25" r="3"/><circle class="star" cx="140" cy="85" r="5"/><circle class="star" cx="220" cy="50" r="3"/><circle class="star" cx="265" cy="125" r="4"/><circle class="star" cx="200" cy="180" r="5"/><circle class="star" cx="240" cy="260" r="3"/><circle class="star" cx="150" cy="300" r="4"/><circle class="star" cx="90" cy="225" r="3"/><circle class="star" cx="35" cy="170" r="4"/></svg></div>
+ <div class="inner">
+  <div class="kicker">07 / OUR CONSTELLATION</div><h2 data-bn="দূর থেকে তারা।<br><em>কাছ থেকে, আমরা।</em>" data-en="Stars from afar.<br><em>Us, up close.</em>">দূর থেকে তারা।<br><em>কাছ থেকে, আমরা।</em></h2>
+  <p class="copy" data-bn="আকাশের প্রতিটা তারা আলাদা। তবু আমরা তাদের মাঝে একটা নকশা খুঁজে নিই, একটা গল্পের নাম দিই। আমাদেরও হয়তো তেমনই—দুটি আলাদা মানুষ, আলাদা দিন, আলাদা স্বপ্ন; তবু মাঝখানে তৈরি হয় আমাদের নিজস্ব এক আকাশ।" data-en="Every star is separate. Still, we connect them and give the shape a story. Maybe we're like that too: two different people, days, and dreams, with a little sky of our own forming in between.">আকাশের প্রতিটা তারা আলাদা। তবু আমরা তাদের মাঝে একটা নকশা খুঁজে নিই, একটা গল্পের নাম দিই। আমাদেরও হয়তো তেমনই—দুটি আলাদা মানুষ, আলাদা দিন, আলাদা স্বপ্ন; তবু মাঝখানে তৈরি হয় আমাদের নিজস্ব এক আকাশ।</p>
+ </div>
+</section>
+<section class="scene s9" data-scene="8">
+ <div class="inner hero-layout">
+  <div><div class="kicker">08 / THE DAYS AHEAD</div><h2 data-bn="এখনো তো<br><em>অনেক কিছু</em><br>বাকি।" data-en="There's still<br><em>so much</em><br>left.">এখনো তো<br><em>অনেক কিছু</em><br>বাকি।</h2>
+   <p class="copy" data-bn="আরও কিছু ছবি, আরও কিছু রাত জেগে কথা, আরও কিছু অকারণ হাসি। সবকিছু আগে থেকে ঠিক করে রাখতে হবে না। শুধু একসাথে থাকি, বাকিটা গল্প নিজেই বানিয়ে নেবে।" data-en="More photos, more late-night talks, more laughing at absolutely nothing. We don't need to plan it all. Let's keep showing up, and let the story write itself.">আরও কিছু ছবি, আরও কিছু রাত জেগে কথা, আরও কিছু অকারণ হাসি। সবকিছু আগে থেকে ঠিক করে রাখতে হবে না। শুধু একসাথে থাকি, বাকিটা গল্প নিজেই বানিয়ে নেবে।</p>
+   <button class="cta" id="windowBtn"><span data-bn="জানালায় টোকা দাও" data-en="TAP ON THE WINDOW">জানালায় টোকা দাও</span><span>↗</span></button><p id="windowMessage" class="copy" style="display:none;margin-top:18px;color:#f0c6d4" data-bn="আরও অনেক রাত বাকি। আরও অনেক ছবি তোলা বাকি। আরও অনেকবার একে অপরকে বলা বাকি—‘আমি আছি।’" data-en="So many nights remain. So many photos to take. So many more times to tell each other: 'I'm here.'">আরও অনেক রাত বাকি। আরও অনেক ছবি তোলা বাকি। আরও অনেকবার একে অপরকে বলা বাকি—‘আমি আছি।’</p>
+  </div><div><div class="window"></div><div class="eyebrow" style="margin-top:14px">A WINDOW TO WHAT'S NEXT</div></div>
+ </div>
+</section>
+<section class="scene s10" data-scene="9">
+ <div class="final-sun"></div><div class="inner">
+  <div class="kicker">09 / TO BE CONTINUED</div>
+  <h2 class="big-final" data-bn="এই গল্পটা<br><em>এখানেই শেষ না।</em>" data-en="This story<br><em>doesn't end here.</em>">এই গল্পটা<br><em>এখানেই শেষ না।</em></h2>
+  <p class="copy" data-bn="আজকের দিনটা কেমন গেল, সেটা আমাকে বলো। ভালো হলে একসাথে খুশি হব, খারাপ হলে একটু সময় নিয়ে ঠিক করে নেব। সব দিন পারফেক্ট হতে হবে না—আমরা যেন একে অপরের মানুষ হয়ে থাকি, সেটাই চাই। ❤️" data-en="Tell me how your day went. If it was good, let's be happy together. If it was rough, we'll take our time with it. Every day doesn't have to be perfect. I just want us to keep being each other's person. ❤️">আজকের দিনটা কেমন গেল, সেটা আমাকে বলো। ভালো হলে একসাথে খুশি হব, খারাপ হলে একটু সময় নিয়ে ঠিক করে নেব। সব দিন পারফেক্ট হতে হবে না—আমরা যেন একে অপরের মানুষ হয়ে থাকি, সেটাই চাই। ❤️</p>
+  <div class="actions"><button class="cta" id="againBtn"><span data-bn="গল্পটা আবার শুরু করি" data-en="BEGIN AGAIN">গল্পটা আবার শুরু করি</span><span>↺</span></button></div>
+  <div class="footer-note">MADE OF LITTLE THINGS, NOT BIG SPEECHES · OUR STORY / STILL IN PROGRESS</div>
+ </div>
+</section>
+</main>
+<footer class="bottom"><div class="progress-wrap"><span class="pagecount" id="pagecount">01 / 10</span><div class="progress" id="progress"></div></div><div class="nav"><button id="prevBtn" disabled aria-label="Previous scene">← <span data-bn="আগে" data-en="BACK">আগে</span></button><button class="next" id="nextBtn"><span data-bn="পরের দৃশ্য" data-en="NEXT SCENE">পরের দৃশ্য</span> ↗</button></div></footer>
+<script>
+const relationshipStart = "2024-01-01"; // Change to the real date (YYYY-MM-DD)
+let currentLang="bn", currentScene=0;
+const scenes=[...document.querySelectorAll(".scene")];
+const progress=document.getElementById("progress");
+scenes.forEach((s,i)=>{const b=document.createElement("button");b.className="dot"+(i===0?" active":"");b.setAttribute("aria-label","Open scene "+(i+1));b.addEventListener("click",()=>go(i));progress.appendChild(b)});
+function go(i){
+ if(i<0||i>=scenes.length||i===currentScene)return;
+ const old=scenes[currentScene];old.classList.remove("active");old.classList.add("leaving");
+ currentScene=i;const next=scenes[currentScene];next.classList.remove("leaving");next.classList.add("active");
+ document.getElementById("pagecount").textContent=String(i+1).padStart(2,"0")+" / "+String(scenes.length).padStart(2,"0");
+ [...progress.children].forEach((d,j)=>d.classList.toggle("active",j===i));
+ document.getElementById("prevBtn").disabled=i===0;
+ document.getElementById("nextBtn").querySelector("span").textContent=i===scenes.length-1?(currentLang==="bn"?"আবার শুরু":"START AGAIN"):(currentLang==="bn"?"পরের দৃশ্য":"NEXT SCENE");
+ // Re-trigger scene entrance after the outgoing transition starts.
+ setTimeout(()=>old.classList.remove("leaving"),700);
+}
+document.querySelectorAll("[data-next]").forEach(b=>b.addEventListener("click",()=>go(currentScene+1)));
+document.getElementById("nextBtn").addEventListener("click",()=>{if(currentScene===scenes.length-1)go(0);else go(currentScene+1)});
+document.getElementById("prevBtn").addEventListener("click",()=>go(currentScene-1));
+document.getElementById("againBtn").addEventListener("click",()=>go(0));
+document.getElementById("openFolder").addEventListener("click",()=>{const f=document.getElementById("folder");f.classList.toggle("open");const t=document.querySelector("#openFolder span");t.textContent=f.classList.contains("open")?(currentLang==="bn"?"ভেতরের কথাটা পড়েছি":"I'VE READ THE NOTE"):(currentLang==="bn"?"ফোল্ডারটা খোলো":"OPEN THE FOLDER");if(f.classList.contains("open"))setTimeout(()=>go(2),900)});
+document.querySelectorAll(".memorycard").forEach(card=>card.addEventListener("click",()=>card.classList.toggle("open")));
+document.getElementById("windowBtn").addEventListener("click",()=>{const m=document.getElementById("windowMessage");m.style.display=m.style.display==="block"?"none":"block";document.getElementById("windowBtn").querySelector("span").textContent=m.style.display==="block"?(currentLang==="bn"?"এই কথাটা মনে রেখো":"KEEP THIS CLOSE"):(currentLang==="bn"?"জানালায় টোকা দাও":"TAP ON THE WINDOW")});
+function updateCounter(){const start=new Date(relationshipStart+"T00:00:00");if(Number.isNaN(start.getTime()))return;let d=Math.max(0,Date.now()-start.getTime());document.getElementById("days").textContent=Math.floor(d/86400000).toLocaleString(currentLang==="bn"?"bn-BD":"en-US");document.getElementById("hours").textContent=String(Math.floor(d%86400000/3600000)).padStart(2,"0");document.getElementById("minutes").textContent=String(Math.floor(d%3600000/60000)).padStart(2,"0");document.getElementById("seconds").textContent=String(Math.floor(d%60000/1000)).padStart(2,"0")}
+setInterval(updateCounter,1000);updateCounter();
+document.getElementById("langBtn").addEventListener("click",()=>{currentLang=currentLang==="bn"?"en":"bn";document.documentElement.lang=currentLang;document.querySelectorAll("[data-bn][data-en]").forEach(el=>{el.innerHTML=el.dataset[currentLang]});document.getElementById("langBtn").textContent=currentLang==="bn"?"EN / বাংলা":"বাংলা / EN";document.getElementById("nextBtn").querySelector("span").textContent=currentScene===scenes.length-1?(currentLang==="bn"?"আবার শুরু":"START AGAIN"):(currentLang==="bn"?"পরের দৃশ্য":"NEXT SCENE");document.getElementById("prevBtn").querySelector("span").textContent=currentLang==="bn"?"আগে":"BACK";updateCounter()});
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")go(currentScene===scenes.length-1?0:currentScene+1);if(e.key==="ArrowLeft")go(currentScene-1);if(e.key==="Escape")go(0)});
+let touchX=0;document.addEventListener("touchstart",e=>{touchX=e.changedTouches[0].screenX},{passive:true});document.addEventListener("touchend",e=>{const dx=e.changedTouches[0].screenX-touchX;if(Math.abs(dx)>90){if(dx<0)go(currentScene===scenes.length-1?0:currentScene+1);else go(currentScene-1)}},{passive:true});
+</script>
+</body>
+</html>
